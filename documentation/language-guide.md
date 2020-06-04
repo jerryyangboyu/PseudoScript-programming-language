@@ -193,6 +193,22 @@ match Token<dataType>
 throws Exception<ParserException>
 ```
 
+##### Declare Statement
+Declare a variable with certain data type without assign value to the variable.
+
+Syntax:
+```
+DECLARE <variableName> : <typeDeclatationExpr>
+DECLARE <variableName> : <primaryDataType | inbuiltDataType | userDefinedDataType>
+DECLARE <variableName> : (<primaryDataType | inbuiltDataType | userDefinedDataType>, ...) // for composite datatype declaration
+DECLARE <variableName> : <int> ... <int> // for declaration of range in int value
+DECLARE <variableName> : ARRAY[<lowerBound>:<upperBound>] OF <primaryDataType | inbuiltDataType | userDefinedDataType>
+```
+Derived formula:
+```
+
+```
+
 #### Expressions
 ##### SymbolTable
 | Description of data | Syntax | Comments |
@@ -214,6 +230,9 @@ throws Exception<ParserException>
 | smaller or equal than | ```<=``` | |
 | equal | ```=``` | reloaded |
 | not equal | ```<>``` or ```!=``` | |
+| access operator | ```.``` | |
+| expand operator | ```..``` | |
+| index access operator | ```[<facotor>]``` | |
 
 ##### Boolean Expressions
 Boolean expressions involves calculation of boolean variable, or boolean scalars
