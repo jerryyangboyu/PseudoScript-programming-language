@@ -37,6 +37,8 @@ public class Keywords {
             // IO
             "INPUT",
             "OUTPUT",
+            "READ",
+            "WRITE",
 
             // PRIMARY DATA TYPE
             "INT",

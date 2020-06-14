@@ -15,5 +15,9 @@ public enum  ASTNodeTypes {
     RETURN_STMT,
     CALL_EXPR,
     INPUT_STMT,
-    OUTPUT_STMT
+    OUTPUT_STMT,
+    FILE_OPEN_STMT,
+    FILE_CLOSE_STMT,
+    FILE_READ_STMT,
+    FILE_WRITE_STMT
 }

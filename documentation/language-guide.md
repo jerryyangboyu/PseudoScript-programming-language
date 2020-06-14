@@ -42,7 +42,7 @@ File handler are responsible for open and close of file stored on permanent stor
 
 Syntax:
 ```
-OPENFILE <filename>, <mode>
+OPENFILE <filename> FOR <mode>
 ```
 Parameters:
 - **filename**: *string*, the absolute address of file stored on the devices.

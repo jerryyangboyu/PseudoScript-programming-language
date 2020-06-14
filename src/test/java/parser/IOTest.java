@@ -5,7 +5,9 @@ import net.yangboyu.pslang.Lexer.Lexer;
 import net.yangboyu.pslang.Lexer.LexicalException;
 import net.yangboyu.pslang.Lexer.TokenType;
 import net.yangboyu.pslang.Paser.ast.ASTNodeTypes;
+import net.yangboyu.pslang.Paser.ast.io.FileCloseStmt;
 import net.yangboyu.pslang.Paser.ast.io.InputStmt;
+import net.yangboyu.pslang.Paser.ast.io.OpenFileStmt;
 import net.yangboyu.pslang.Paser.ast.io.OutputStmt;
 import net.yangboyu.pslang.Paser.util.ParseException;
 import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
@@ -47,6 +49,21 @@ public class IOTest {
         assertEquals("var1", tree.getChild(1).getLexeme().getValue());
         assertEquals("var2", tree.getChild(2).getLexeme().getValue());
         assertEquals("var3", tree.getChild(3).getLexeme().getValue());
+    }
+
+    @Test
+    public void testOpenFileStmt() throws LexicalException, ParseException {
+        var it = createTokenIt("OPENFILE \"test.txt\" FOR READ");
+        var tree = OpenFileStmt.parse(null, it);
+        tree.print(0);
+    }
+
+    @Test
+    public void testCloseFileStmt() throws ParseException, LexicalException {
+        var it = createTokenIt("CLOSEFILE \"test.txt\"");
+        var tree = FileCloseStmt.parse(null, it);
+        tree.print(0);
+
     }
 
     @Test
