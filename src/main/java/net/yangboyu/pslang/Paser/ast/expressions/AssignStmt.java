@@ -22,7 +22,7 @@ public class AssignStmt extends Stmt {
 
         stmt.addChild(factor);
 
-        var lexeme = it.nextMatch("=");
+        var lexeme = it.nextMatch("<-");
 
         var expr = Expr.parse(stmt, it);
 

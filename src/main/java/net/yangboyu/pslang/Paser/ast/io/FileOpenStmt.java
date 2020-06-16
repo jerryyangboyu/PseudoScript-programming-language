@@ -6,7 +6,7 @@ import net.yangboyu.pslang.Paser.util.ParseException;
 import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 import org.apache.commons.lang3.StringUtils;
 
-public class OpenFileStmt extends Stmt {
+public class FileOpenStmt extends Stmt {
 
     private String filename;
     private String openMode;
@@ -19,12 +19,12 @@ public class OpenFileStmt extends Stmt {
         return openMode;
     }
 
-    public OpenFileStmt(ASTNode _parent) {
+    public FileOpenStmt(ASTNode _parent) {
         super(_parent, ASTNodeTypes.FILE_OPEN_STMT, "openfile");
     }
 
     public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
-        var ofs = new OpenFileStmt(parent);
+        var ofs = new FileOpenStmt(parent);
         var lexeme = it.nextMatch("OPENFILE");
         ofs.setLexeme(lexeme);
 

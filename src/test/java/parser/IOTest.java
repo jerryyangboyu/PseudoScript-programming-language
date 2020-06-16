@@ -1,14 +1,10 @@
 package parser;
 
-import net.yangboyu.pslang.Lexer.Keywords;
 import net.yangboyu.pslang.Lexer.Lexer;
 import net.yangboyu.pslang.Lexer.LexicalException;
 import net.yangboyu.pslang.Lexer.TokenType;
-import net.yangboyu.pslang.Paser.ast.ASTNodeTypes;
-import net.yangboyu.pslang.Paser.ast.io.FileCloseStmt;
-import net.yangboyu.pslang.Paser.ast.io.InputStmt;
-import net.yangboyu.pslang.Paser.ast.io.OpenFileStmt;
-import net.yangboyu.pslang.Paser.ast.io.OutputStmt;
+import net.yangboyu.pslang.Paser.ast.ASTNode;
+import net.yangboyu.pslang.Paser.ast.io.*;
 import net.yangboyu.pslang.Paser.util.ParseException;
 import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 import org.junit.jupiter.api.Test;
@@ -54,7 +50,7 @@ public class IOTest {
     @Test
     public void testOpenFileStmt() throws LexicalException, ParseException {
         var it = createTokenIt("OPENFILE \"test.txt\" FOR READ");
-        var tree = OpenFileStmt.parse(null, it);
+        var tree = FileOpenStmt.parse(null, it);
         tree.print(0);
     }
 
@@ -64,6 +60,24 @@ public class IOTest {
         var tree = FileCloseStmt.parse(null, it);
         tree.print(0);
 
+    }
+
+    @Test
+    public void testFileReadStmt() throws LexicalException, ParseException {
+        var it = createTokenIt("READFILE \"test.txt\", myVariable");
+        ASTNode tree = FileReadStmt.parse(null, it);
+
+        assertEquals("myVariable", tree.getChild(0).getLexeme().getValue());
+        assertEquals("\"test.txt\"", tree.getProp("filename"));
+    }
+
+    @Test
+    public void testFileWriteStmt() throws LexicalException, ParseException {
+        var it = createTokenIt("WRITEFILE \"test.txt\", myVariable");
+        ASTNode tree = FileWriteStmt.parse(null, it);
+
+        assertEquals("myVariable", tree.getChild(0).getLexeme().getValue());
+        assertEquals("\"test.txt\"", tree.getProp("filename"));
     }
 
     @Test
