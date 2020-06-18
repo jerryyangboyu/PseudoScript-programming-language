@@ -4,6 +4,8 @@ import net.yangboyu.pslang.Paser.ast.declaraction.DeclareStmt;
 import net.yangboyu.pslang.Paser.ast.expressions.AssignStmt;
 import net.yangboyu.pslang.Paser.ast.expressions.CallExpr;
 import net.yangboyu.pslang.Paser.ast.expressions.Expr;
+import net.yangboyu.pslang.Paser.ast.io.InputStmt;
+import net.yangboyu.pslang.Paser.ast.io.OutputStmt;
 import net.yangboyu.pslang.Paser.ast.selection.IfStmt;
 import net.yangboyu.pslang.Paser.ast.subroutines.FunctionDeclareStmt;
 import net.yangboyu.pslang.Paser.ast.subroutines.ReturnStmt;
@@ -27,27 +29,32 @@ public abstract class Stmt extends ASTNode {
 
         if(token.isVariable() && lookahead.getValue().equals("<-")) {
             return AssignStmt.parse(parent, it);
-        }else if(token.getValue().equals("DECLARE") && lookahead.isVariable()){
+        }else if (token.getValue().equals("DECLARE") && lookahead.isVariable()){
             return DeclareStmt.parse(parent, it);
         }else if (token.getValue().equals("CALL")) {
             return CallExpr.parse(parent, it);
-        }else if(token.getValue().equals("FUNCTION")) {
+        }else if (token.getValue().equals("FUNCTION")) {
             return FunctionDeclareStmt.parse(parent, it);
-        }else if(token.getValue().equals("RETURN")) {
+        }else if (token.getValue().equals("RETURN")) {
             return ReturnStmt.parse(parent, it);
-        }else if(token.getValue().equals("IF")) {
+        }else if (token.getValue().equals("IF")) {
             return IfStmt.parse(parent, it);
-        }else{
+        }else if (token.getValue().equals("OUTPUT")) {
+            return OutputStmt.parse(parent, it);
+        }else if (token.getValue().equals("INPUT")) {
+            return InputStmt.parse(parent, it);
+        } else {
             ASTNode expr = Expr.parse(parent, it);
 
 
-            // TODO deal with the last test of TestStmt
+                // TODO deal with the last test of TestStmt
 //            if (expr == null) {
 //                throw new NotImplementedException(String.format("[dev branch warning] Token %s not impl, " +
 //                        "This is an warning for beta version compiler. Mostly this exception would be happen " +
 //                        "as class Expr cannot handle the token.", token.getValue()));
 //            }
             return expr;
+
         }
 
     }
