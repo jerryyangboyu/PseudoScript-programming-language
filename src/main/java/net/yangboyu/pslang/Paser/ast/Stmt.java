@@ -2,6 +2,7 @@ package net.yangboyu.pslang.Paser.ast;
 
 import net.yangboyu.pslang.Paser.ast.declaraction.DeclareStmt;
 import net.yangboyu.pslang.Paser.ast.expressions.AssignStmt;
+import net.yangboyu.pslang.Paser.ast.expressions.CallExpr;
 import net.yangboyu.pslang.Paser.ast.expressions.Expr;
 import net.yangboyu.pslang.Paser.ast.selection.IfStmt;
 import net.yangboyu.pslang.Paser.ast.subroutines.FunctionDeclareStmt;
@@ -24,18 +25,18 @@ public abstract class Stmt extends ASTNode {
         var lookahead = it.peek();
         it.putBack();
 
-        if(token.isVariable() && lookahead.getValue().equals("=")) {
+        if(token.isVariable() && lookahead.getValue().equals("<-")) {
             return AssignStmt.parse(parent, it);
-        }else if(token.getValue().equals("auto") && lookahead.isVariable()){
+        }else if(token.getValue().equals("DECLARE") && lookahead.isVariable()){
             return DeclareStmt.parse(parent, it);
-        }else if(token.getValue().equals("func")) {
+        }else if (token.getValue().equals("CALL")) {
+            return CallExpr.parse(parent, it);
+        }else if(token.getValue().equals("FUNCTION")) {
             return FunctionDeclareStmt.parse(parent, it);
-        }else if(token.getValue().equals("return")) {
+        }else if(token.getValue().equals("RETURN")) {
             return ReturnStmt.parse(parent, it);
-        }else if(token.getValue().equals("if")) {
+        }else if(token.getValue().equals("IF")) {
             return IfStmt.parse(parent, it);
-        }else if(token.getValue().equals("{")) {
-            return Block.parse(parent, it);
         }else{
             ASTNode expr = Expr.parse(parent, it);
 

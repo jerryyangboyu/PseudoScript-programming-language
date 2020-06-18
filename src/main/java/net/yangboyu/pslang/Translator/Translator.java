@@ -59,7 +59,7 @@ public class Translator {
         popRecord.setArg1(parent.localSize());
     }
 
-    public void translateAssignStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) {
+    public void translateAssignStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
         Symbol assignedSymbol = symbolTable.createSymbolByLexeme(node.getChild(0).getLexeme());
         ASTNode expr = node.getChild(1);
         Symbol addr = translateExpr(program, expr, symbolTable);
@@ -70,7 +70,7 @@ public class Translator {
     // SDD
     //  E -> E1 op E2
     //  E -> F
-    public Symbol translateExpr(TAProgram program, ASTNode node, SymbolTable symbolTable) {
+    public Symbol translateExpr(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
         if (node.isValueType()) {
             Symbol addr = symbolTable.createSymbolByLexeme(node.getLexeme());
             node.setProp("addr", addr);

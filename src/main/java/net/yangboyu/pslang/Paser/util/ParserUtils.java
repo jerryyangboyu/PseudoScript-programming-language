@@ -4,7 +4,7 @@ import net.yangboyu.pslang.Paser.ast.ASTNode;
 import jdk.jshell.spi.ExecutionControl;
 
 public class ParserUtils {
-    public static String toPostfixExpression(ASTNode node) throws ExecutionControl.NotImplementedException {
+    public static String toPostfixExpression(ASTNode node) throws ExecutionControl.NotImplementedException, ParseException {
         String leftStr = "";
         String rightStr = "";
         switch (node.getType()) {

@@ -66,11 +66,6 @@ public class Expr extends ASTNode {
             return null;
         }
 
-        //函数调用
-        if (it.hasNext() && it.peek().getValue().equals("(")) {
-            return CallExpr.parse(parent, it, factor);
-        }
-
         //正常的表达式因子
         return factor;
     }

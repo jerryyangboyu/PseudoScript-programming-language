@@ -41,19 +41,19 @@ public class FunctionDeclareStmt extends Stmt {
         return func;
     }
 
-    public ASTNode getArgs() {
+    public ASTNode getArgs() throws ParseException {
         return this.getChild(1);
     }
 
-    public Variable getFunctionVariable() {
+    public Variable getFunctionVariable() throws ParseException {
         return (Variable)this.getChild(0);
     }
 
-    public String getFunctionType() {
+    public String getFunctionType() throws ParseException {
         return this.getFunctionVariable().getTypeLexeme().getValue();
     }
 
-    public Block getBlock() {
+    public Block getBlock() throws ParseException {
         return (Block)this.getChild(2);
     }
 }

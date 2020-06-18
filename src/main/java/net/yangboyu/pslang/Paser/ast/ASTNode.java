@@ -1,6 +1,7 @@
 package net.yangboyu.pslang.Paser.ast;
 
 import net.yangboyu.pslang.Lexer.Token;
+import net.yangboyu.pslang.Paser.util.ParseException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -47,7 +48,12 @@ public abstract class ASTNode {
         this.label = _label;
     }
 
-    public ASTNode getChild(int index){
+    public String getLabel() {return this.label;}
+
+    public ASTNode getChild(int index) throws ParseException {
+        if (index >= this.children.size() || index < 0) {
+            throw new ParseException(String.format("Oops, index out of range for getChild, index: %s, max index: %s", index, this.children.size()));
+        }
         return this.children.get(index);
     }
 

@@ -13,12 +13,7 @@ public class AssignStmt extends Stmt {
     public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
         var stmt = new AssignStmt(parent);
 
-        var tkn = it.peek();
-        var factor = Factor.parse(it);
-
-        if(factor == null) {
-            throw new ParseException(tkn);
-        }
+        var factor = (Variable) Factor.parse(it, ASTNodeTypes.VARIABLE);
 
         stmt.addChild(factor);
 

@@ -1,9 +1,7 @@
 package net.yangboyu.pslang.Paser.ast.declaraction;
 
-import net.yangboyu.pslang.Paser.ast.ASTNode;
-import net.yangboyu.pslang.Paser.ast.ASTNodeTypes;
-import net.yangboyu.pslang.Paser.ast.Factor;
-import net.yangboyu.pslang.Paser.ast.Stmt;
+import net.yangboyu.pslang.Lexer.TokenType;
+import net.yangboyu.pslang.Paser.ast.*;
 import net.yangboyu.pslang.Paser.ast.expressions.Expr;
 import net.yangboyu.pslang.Paser.util.ParseException;
 import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
@@ -16,23 +14,23 @@ public class DeclareStmt extends Stmt {
 
     public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
         var stmt = new DeclareStmt(parent);
-        it.nextMatch("auto");
-        var tkn = it.peek();
-        var factor = Factor.parse(it);
+        var lexeme = it.nextMatch("DECLARE");
+        stmt.setLexeme(lexeme);
 
-        if(factor == null) {
-            throw new ParseException(tkn);
-        }
-
+        var factor = (Variable) Factor.parse(it, ASTNodeTypes.VARIABLE);
         stmt.addChild(factor);
 
-        var lexeme = it.nextMatch("=");
+        it.nextMatch(":");
 
-        var expr = Expr.parse(stmt, it);
-
-        stmt.addChild(expr);
-
-        stmt.setLexeme(lexeme);
+        // primary data type support
+        var type = it.nextMatch(TokenType.KEYWORD);
+        if (type.isPrimaryType()) {
+            factor.setTypeLexeme(type);
+        } else if (type.isType()) {
+            // other types TODO
+        } else {
+            throw new ParseException(type);
+        }
 
         return stmt;
     }
