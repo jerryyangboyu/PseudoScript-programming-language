@@ -22,10 +22,15 @@ public abstract class Stmt extends ASTNode {
         if(!it.hasNext()) {
             return null;
         }
-
         var token = it.next();
         var lookahead = it.peek();
+        if (lookahead == null) {
+            it.putBack();
+            return null;
+        }
         it.putBack();
+
+        // make sure the token and lookahead are both not null pointer and put back to the origin place
 
         if(token.isVariable() && lookahead.getValue().equals("<-")) {
             return AssignStmt.parse(parent, it);

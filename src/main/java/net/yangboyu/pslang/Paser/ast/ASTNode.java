@@ -50,9 +50,10 @@ public abstract class ASTNode {
 
     public String getLabel() {return this.label;}
 
-    public ASTNode getChild(int index) throws ParseException {
+    public ASTNode getChild(int index) {
         if (index >= this.children.size() || index < 0) {
-            throw new ParseException(String.format("Oops, index out of range for getChild, index: %s, max index: %s", index, this.children.size()));
+            return null;
+            // System.out.println(String.format("Oops, index out of range for getChild, index: %s, max index: %s", index, this.children.size()));
         }
         return this.children.get(index);
     }

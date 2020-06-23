@@ -370,6 +370,7 @@ public class Token {
     public boolean isPrimaryType() {
         return this._value.equals("BOOLEAN") ||
                 this._value.equals("INT") ||
+                this._value.equals("INTEGER") ||
                 this._value.equals("STRING") ||
                 this._value.equals("REAL");
     }
@@ -377,6 +378,7 @@ public class Token {
     public boolean isType() {
         return this._value.equals("BOOLEAN") ||
                 this._value.equals("INT") ||
+                this._value.equals("INTEGER") ||
                 this._value.equals("STRING") ||
                 this._value.equals("REAL") ||
                 this._value.equals("DATE") ||

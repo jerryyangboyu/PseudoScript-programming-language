@@ -19,7 +19,6 @@ public class Program extends Block {
             program.addChild(stmt);
         }
 
-
         return program;
     }
 }

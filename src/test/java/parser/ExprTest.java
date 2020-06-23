@@ -68,14 +68,21 @@ public class ExprTest {
 
     @Test
     public void testComplexCallStmt() throws LexicalException, ParseException {
-        var it = createTokenIt("CALL myFunc(arg1, arg2, arg3)");
+        var it = createTokenIt("CALL myFunc(1+1, arg2, arg3)");
         var tree = CallExpr.parse(null, it);
         tree.print(0);
 
         assertEquals("myFunc", tree.getChild(0).getLexeme().getValue());
-        assertEquals("arg1", tree.getChild(1).getLexeme().getValue());
+        assertEquals(ASTNodeTypes.BINARY_EXPR, tree.getChild(1).getType());
         assertEquals("arg2", tree.getChild(2).getLexeme().getValue());
         assertEquals("arg3", tree.getChild(3).getLexeme().getValue());
+    }
+
+    @Test
+    public void testFunctionCallStmt() throws LexicalException, ParseException {
+        var it = createTokenIt("myFunc(n, n - 1)");
+        var tree = Expr.parse(null, it);
+        tree.print(0);
     }
 
     @Test

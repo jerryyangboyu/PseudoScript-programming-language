@@ -42,7 +42,7 @@ public class Factor extends ASTNode {
         if (factor != null && factor.getType() == type) {
             return factor;
         } else if (factor == null) {
-            throw new ParseException(String.format("Expected token type %s", type));
+            throw new ParseException(String.format("Unexpected token type %s", type));
         } else {
             throw new ParseException(String.format("Unexpected token type %s, it should be type %s.", factor.getType(), type));
         }

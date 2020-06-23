@@ -42,6 +42,7 @@ public class Keywords {
 
             // PRIMARY DATA TYPE
             "INT",
+            "INTEGER",
             "REAL",
             "STRING",
             "CHAR",

@@ -15,7 +15,7 @@ public class PeekTokenIterator extends PeekIterator<Token> {
 
     public Token nextMatch(String value) throws ParseException {
         if(!this.hasNext()) {
-            throw new ParseException("Lexical Error: Early EOF");
+            throw new ParseException(String.format("Unexpected EOF while parsing, missing token %s", value));
         }
 
         var token = this.next();
@@ -28,7 +28,7 @@ public class PeekTokenIterator extends PeekIterator<Token> {
 
     public Token nextMatch(TokenType _type) throws ParseException {
         if(!this.hasNext()) {
-            throw new ParseException("Lexical Error: Early EOF");
+            throw new ParseException(String.format("Unexpected EOF while parsing, missing token type %s", _type));
         }
 
         var token = this.next();

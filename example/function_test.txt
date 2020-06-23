@@ -1,0 +1,6 @@
+FUNCTION add(a: INTEGER, b: INTEGER) RETURNS INTEGER
+    DECLARE c : INTEGER
+    c <- a + b
+    RETURN c
+    
+ENDFUNCTION

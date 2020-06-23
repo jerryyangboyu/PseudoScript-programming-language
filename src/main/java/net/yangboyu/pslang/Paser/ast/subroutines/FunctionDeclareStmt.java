@@ -12,48 +12,53 @@ public class FunctionDeclareStmt extends Stmt {
     }
 
     public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
-        it.nextMatch("func");
+        it.nextMatch("FUNCTION");
 
         var func = new FunctionDeclareStmt(parent);
 
+        // lexeme is function variable
         var lexeme  = it.peek(); // func fibonacci
-
-        var functionVariable = (Variable) Factor.parse(it);
-
+        var functionVariable = (Variable) Factor.parse(it, ASTNodeTypes.VARIABLE);
         func.setLexeme(lexeme);
         func.addChild(functionVariable);
 
+        // parse arguments
         it.nextMatch("(");
         var args = FunctionArgs.parse(parent, it);
         it.nextMatch(")");
         func.addChild(args);
 
+        // parse return data type
+        it.nextMatch("RETURNS");
         var keyword = it.nextMatch(TokenType.KEYWORD);
+        // It can return any data type include user defined data type and inbuilt data type
         if(!keyword.isType()) {
             throw new ParseException(keyword);
         }
-        assert functionVariable != null;
         functionVariable.setTypeLexeme(keyword);
 
+        // parse function body
         var block = Block.parse(parent, it);
         func.addChild(block);
+
+        it.nextMatch("ENDFUNCTION");
 
         return func;
     }
 
-    public ASTNode getArgs() throws ParseException {
+    public ASTNode getArgs() {
         return this.getChild(1);
     }
 
-    public Variable getFunctionVariable() throws ParseException {
+    public Variable getFunctionVariable() {
         return (Variable)this.getChild(0);
     }
 
-    public String getFunctionType() throws ParseException {
+    public String getFunctionType() {
         return this.getFunctionVariable().getTypeLexeme().getValue();
     }
 
-    public Block getBlock() throws ParseException {
+    public Block getBlock() {
         return (Block)this.getChild(2);
     }
 }

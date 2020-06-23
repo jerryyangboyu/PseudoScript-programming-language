@@ -14,7 +14,7 @@ public class ReturnStmt extends Stmt {
     }
 
     public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
-        var lexeme = it.nextMatch("return");
+        var lexeme = it.nextMatch("RETURN");
 
         var returnStmt = new ReturnStmt(parent);
 

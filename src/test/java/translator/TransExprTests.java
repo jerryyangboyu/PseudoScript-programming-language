@@ -47,7 +47,7 @@ public class TransExprTests {
 
     @Test
     public void testAssignStmt() throws LexicalException, ParseException {
-        var source = "a=1.0*2.0*3.0";
+        var source = "a<-1.0*2.0*3.0";
         var tree = Parser.parse(source);
 //        tree.print(0);
         var translator = new Translator();

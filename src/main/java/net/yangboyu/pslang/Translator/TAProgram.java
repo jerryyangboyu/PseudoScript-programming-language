@@ -40,4 +40,16 @@ public class TAProgram {
         }
         // end
     }
+
+    public StaticSymbolTable getStaticSymbolTable() {
+        return this.staticSymbolTable;
+    }
+
+    public TAInstruction addLabel() {
+        var labelCode = "L" + this.labelCounter++;
+        var instruction = new TAInstruction(TAInstructionType.LABEL, null, null, null, null);
+        instruction.setArg1(labelCode);
+        this.instructions.add(instruction);
+        return instruction;
+    }
 }

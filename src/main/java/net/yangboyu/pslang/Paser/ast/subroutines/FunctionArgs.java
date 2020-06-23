@@ -1,6 +1,7 @@
 package net.yangboyu.pslang.Paser.ast.subroutines;
 
 import net.yangboyu.pslang.Paser.ast.ASTNode;
+import net.yangboyu.pslang.Paser.ast.ASTNodeTypes;
 import net.yangboyu.pslang.Paser.ast.Factor;
 import net.yangboyu.pslang.Paser.ast.Variable;
 import net.yangboyu.pslang.Paser.util.ParseException;
@@ -16,11 +17,10 @@ public class FunctionArgs extends ASTNode {
 
         var args = new FunctionArgs(parent);
 
-        while(it.peek().isType()) {
+        while(it.hasNext() && it.peek().isVariable()) {
+            var variable = (Variable) Factor.parse(it, ASTNodeTypes.VARIABLE);
+            it.nextMatch(":");
             var type = it.next();
-            var variable = (Variable) Factor.parse(it);
-
-            assert variable != null;
             variable.setTypeLexeme(type);
 
             args.addChild(variable);
