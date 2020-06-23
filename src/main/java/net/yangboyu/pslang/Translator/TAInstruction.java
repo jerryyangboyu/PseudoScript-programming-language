@@ -81,6 +81,8 @@ public class TAInstruction {
                 return "CALL " + arg1; // 注意arg1本应该是一个标签但是这里自动调用类型转换函数转为string
             case SP:
                 return "SP " + arg1;
+            case FUNC_BEGIN:
+                return "FUNC_BEGIN";
         }
         throw new NotImplementedException("Unknown instruction type: " + this.type);
     }

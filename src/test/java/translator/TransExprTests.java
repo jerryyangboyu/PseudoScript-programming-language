@@ -88,15 +88,15 @@ public class TransExprTests {
 
     @Test
     public void testFunctionCallStmt() throws LexicalException, ParseException {
-        var source = "ans <- add(5, 10)";
-        var tree = Parser.parse(source);
-//        tree.print(0);
-        var translator = new Translator();
-        var symbolTable = new SymbolTable();
-        var program = new TAProgram();
+        // TODO
+        // bug1: 如果block为空，那么不能解析
+        // bug2: 如果只是函数名相同但是参数不同，不会报未找到错误
 
-        // 这里程序的顶层默认添加了program项，需要配合parseProgram() -> parseExpr(), 才能运行这里为了测试方便直接.getChild()了
-        translator.translateAssignStmt(program, tree.getChild(0), symbolTable);
+        var source = "FUNCTION add() RETURNS INTEGER ENDFUNCTION \n" +
+                "ans <- add(5, 10)";
+        var tree = Parser.parse(source);
+        var translator = new Translator();
+        var program = translator.translate(tree);
         System.out.println(program.toString());
     }
 

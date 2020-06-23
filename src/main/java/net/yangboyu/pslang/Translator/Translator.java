@@ -41,8 +41,10 @@ public class Translator {
                 return;
             case FUNCTION_DECLARE_STMT:
                 translateFunctionDeclareStmt(program, node, symbolTable);
+                return;
             case CALL_EXPR:
                 translateCallExpr(program, node, symbolTable);
+                return;
         }
         throw new NotImplementedException("net.yangboyu.pslang.Translator not implemented for " + node.getType());
     }
@@ -82,10 +84,13 @@ public class Translator {
         var func = (FunctionDeclareStmt)node;
 
         var funcSymbolTable = new SymbolTable();
+
+        program.add(new TAInstruction(TAInstructionType.FUNC_BEGIN, null, null, null, null));
         // 函数调用的时候关联
-        funcSymbolTable.createLabel((String)label.getArg1(), node.getLexeme());
+        symbolTable.createLabel((String)label.getArg1(), node.getLexeme());
         // 关联函数名
         label.setArg2(node.getLexeme().getValue());
+        symbolTable.addChild(funcSymbolTable);
 
         for (var arg: func.getArgs().getChildren()) {
             funcSymbolTable.createSymbolByLexeme(arg.getLexeme());
@@ -205,7 +210,9 @@ public class Translator {
 
             return instruction.getResult();
         }
-        throw new NotImplementedException("Unexpected token type: " + node.getType());
+
+        String debugInfo = " [DEBUG INFO] TokenName: " + node.getLexeme().getValue() + "Node: " + node;
+        throw new NotImplementedException("Unexpected token type: " + node.getType() + debugInfo);
     }
 
     public static void checkDataType(ASTNode node) {
