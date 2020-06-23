@@ -86,4 +86,18 @@ public class TransExprTests {
         assertOpCodes(expectedResults, program.getInstructions());
     }
 
+    @Test
+    public void testFunctionCallStmt() throws LexicalException, ParseException {
+        var source = "ans <- add(5, 10)";
+        var tree = Parser.parse(source);
+//        tree.print(0);
+        var translator = new Translator();
+        var symbolTable = new SymbolTable();
+        var program = new TAProgram();
+
+        // 这里程序的顶层默认添加了program项，需要配合parseProgram() -> parseExpr(), 才能运行这里为了测试方便直接.getChild()了
+        translator.translateAssignStmt(program, tree.getChild(0), symbolTable);
+        System.out.println(program.toString());
+    }
+
 }

@@ -4,6 +4,7 @@ import net.yangboyu.pslang.Lexer.Token;
 import net.yangboyu.pslang.Lexer.TokenType;
 import net.yangboyu.pslang.Paser.ast.ASTNode;
 import net.yangboyu.pslang.Paser.ast.ASTNodeTypes;
+import net.yangboyu.pslang.Paser.ast.expressions.Expr;
 import net.yangboyu.pslang.Paser.ast.selection.IfStmt;
 import net.yangboyu.pslang.Paser.ast.subroutines.FunctionDeclareStmt;
 import net.yangboyu.pslang.Paser.util.ParseException;
@@ -46,7 +47,7 @@ public class Translator {
         throw new NotImplementedException("net.yangboyu.pslang.Translator not implemented for " + node.getType());
     }
 
-    private void translateCallExpr(TAProgram program, ASTNode node, SymbolTable symbolTable) {
+    private Symbol translateCallExpr(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
         // 提取函数名称
         var factor = node.getChild(0);
 
@@ -65,10 +66,15 @@ public class Translator {
         // 通过 lexeme 找到 func 的 label
         var funcAddr = symbolTable.cloneFromSymbolTree(factor.getLexeme(), 0);
 
+        if (funcAddr == null) {
+            throw new ParseException("Syntax Error, procedure or function name \"" + factor.getLexeme().getValue() + "\" is not defined");
+        }
+
         program.add(new TAInstruction(TAInstructionType.SP, null, null, -symbolTable.localSize(), null));
         program.add(new TAInstruction(TAInstructionType.CALL, null, null, funcAddr, null));
         program.add(new TAInstruction(TAInstructionType.SP, null, null, symbolTable.localSize(), null));
 
+        return returnValue;
     }
 
     private void translateFunctionDeclareStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
@@ -156,7 +162,7 @@ public class Translator {
         popRecord.setArg1(parent.localSize());
     }
 
-    public void translateAssignStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) {
+    public void translateAssignStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
         Symbol assignedSymbol = symbolTable.createSymbolByLexeme(node.getChild(0).getLexeme());
         ASTNode expr = node.getChild(1);
         Symbol addr = translateExpr(program, expr, symbolTable);
@@ -166,36 +172,40 @@ public class Translator {
     // SDD
     //  E -> E1 op E2
     //  E -> F
-    public Symbol translateExpr(TAProgram program, ASTNode node, SymbolTable symbolTable) {
+    public Symbol translateExpr(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
         if (node.isValueType()) {
             Symbol addr = symbolTable.createSymbolByLexeme(node.getLexeme());
             node.setProp("addr", addr);
             return addr;
         } else if(node.getType() == ASTNodeTypes.CALL_EXPR) {
-            throw new NotImplementedException("No implementation for call expr");
+            var addr = translateCallExpr(program, node, symbolTable);
+            node.setProp("addr", addr);
+            return addr;
+        } else if(node instanceof Expr) {
+
+            // 遍历他所有的子树并且建立临时变量
+            for (var child : node.getChildren()) {
+                translateExpr(program, child, symbolTable);
+            }
+
+            // 如果中间节点没有加上标签，那么创建中间节点的变量
+            if (node.getProp("addr") == null) {
+                node.setProp("addr", symbolTable.createVariable());
+            }
+
+            checkDataType(node);
+
+            var instruction = new TAInstruction(TAInstructionType.ASSIGN,
+                    (Symbol)node.getProp("addr"),
+                    node.getLexeme().getValue(),
+                    (Symbol)node.getChild(0).getProp("addr"),
+                    (Symbol)node.getChild(1).getProp("addr"));
+
+            program.add(instruction);
+
+            return instruction.getResult();
         }
-
-        // 遍历他所有的子树并且建立临时变量
-        for (var child : node.getChildren()) {
-            translateExpr(program, child, symbolTable);
-        }
-
-        // 如果中间节点没有加上标签，那么创建中间节点的变量
-        if (node.getProp("addr") == null) {
-            node.setProp("addr", symbolTable.createVariable());
-        }
-
-        checkDataType(node);
-
-        var instruction = new TAInstruction(TAInstructionType.ASSIGN,
-                (Symbol)node.getProp("addr"),
-                node.getLexeme().getValue(),
-                (Symbol)node.getChild(0).getProp("addr"),
-                (Symbol)node.getChild(1).getProp("addr"));
-
-        program.add(instruction);
-
-        return instruction.getResult();
+        throw new NotImplementedException("Unexpected token type: " + node.getType());
     }
 
     public static void checkDataType(ASTNode node) {
@@ -205,7 +215,7 @@ public class Translator {
     public void translateDeclareStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
         Token lexeme = node.getChild(0).getLexeme();
         if (symbolTable.exists(lexeme)) {
-            throw new ParseException("Syntax Error, Identifier " + lexeme.getValue() + "is already defined");
+            throw new ParseException("Syntax Error, Identifier \"" + lexeme.getValue() + "\" is already defined");
         }
 
         var assignedSymbol = symbolTable.createSymbolByLexeme(lexeme);
