@@ -5,12 +5,12 @@ import net.yangboyu.pslang.Paser.util.ParseException;
 import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 
 public class OutputStmt extends Stmt {
-    public OutputStmt(ASTNode parent) {
-        super(parent, ASTNodeTypes.OUTPUT_STMT, "output");
+    public OutputStmt() {
+        super(ASTNodeTypes.OUTPUT_STMT, "output");
     }
 
-    public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
-        var output_stmt = new OutputStmt(parent);
+    public static ASTNode parse(PeekTokenIterator it) throws ParseException {
+        var output_stmt = new OutputStmt();
         var lexeme = it.nextMatch("OUTPUT");
         output_stmt.setLexeme(lexeme);
 

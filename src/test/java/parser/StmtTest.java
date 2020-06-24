@@ -26,7 +26,7 @@ public class StmtTest {
     public void declare() throws LexicalException, ParseException, ExecutionControl.NotImplementedException {
         var it = createTokenIt("auto i = 100 * 2");
 
-        var stmt = DeclareStmt.parse(null, it);
+        var stmt = DeclareStmt.parse(it);
 
 //        assertEquals(ParserUtils.toPostfixExpression(stmt), "i 100 2 * =");
 
@@ -37,7 +37,7 @@ public class StmtTest {
     public void assign() throws LexicalException, ParseException {
         var it = createTokenIt("i = (100 * 2) + 3");
 
-        var stmt = AssignStmt.parse(null, it);
+        var stmt = AssignStmt.parse(it);
 
         stmt.print(0);
     }
@@ -47,8 +47,8 @@ public class StmtTest {
         var it = createTokenIt("var myVariable = 300 + 1 / 0");
         var it2 = createTokenIt("myVariable = 0");
 
-        var stmt = Stmt.parseStmt(null, it);
-        var stmt2 = Stmt.parseStmt(null, it2);
+        var stmt = Stmt.parseStmt(it);
+        var stmt2 = Stmt.parseStmt(it2);
 
         assert stmt != null;
         stmt.print(0);
@@ -65,7 +65,7 @@ public class StmtTest {
                 "i  = 100" +
                 "}");
 
-        var block = Block.parse(null, it);
+        var block = Block.parse(it);
 
         block.print(0);
     }
@@ -73,40 +73,16 @@ public class StmtTest {
     @Test
     public void program() throws LexicalException, ParseException, FileNotFoundException, UnsupportedEncodingException {
         var tokens = Lexer.fromFile("./example/program.ps");
-        var func = (FunctionDeclareStmt)Stmt.parseStmt(null, new PeekTokenIterator(tokens.stream()));
+        var func = (FunctionDeclareStmt) Stmt.parseStmt(new PeekTokenIterator(tokens.stream()));
 
         assert func != null;
         func.print(0);
     }
 
     @Test
-    public void IfStmt() throws LexicalException, ParseException {
-        var it = createTokenIt("if(a) \n{\n a = 1\n }\n");
-        var it2 = createTokenIt("if(a > (b+1)) \n{\n a = 1\n }\n");
-
-        var stmt = IfStmt.parse(null, it);
-        var stmt2 = IfStmt.parse(null, it2);
-
-        stmt.print(0);
-        stmt2.print(0);
-    }
-
-    @Test
-    public void IfElseStmt() throws LexicalException, ParseException {
-        var it = createTokenIt("if(a) \n{\n a = 1\n }\n else { b = 1 \n a = a * 3}");
-        var it2 = createTokenIt("if(a) \n{\n a = 1\n }\n else if((c == 3) >= 1) { b = 1 \n a = a * 3} else \n {c = a + 1}");
-
-        var stmt = IfStmt.parse(null, it);
-        var stmt2 = IfStmt.parse(null, it2);
-
-        stmt2.print(0);
-        stmt.print(0);
-    }
-
-    @Test
     public void function() throws FileNotFoundException, UnsupportedEncodingException, LexicalException, ParseException {
         var tokens = Lexer.fromFile("./example/function.ps");
-        var func = (FunctionDeclareStmt)Stmt.parseStmt(null, new PeekTokenIterator(tokens.stream()));
+        var func = (FunctionDeclareStmt)Stmt.parseStmt(new PeekTokenIterator(tokens.stream()));
 
         assert func != null;
         func.print(0);
@@ -129,7 +105,7 @@ public class StmtTest {
     @Test
     public void function1() throws FileNotFoundException, UnsupportedEncodingException, LexicalException, ParseException {
         var tokens = Lexer.fromFile("./example/recursion.ps");
-        var func = (FunctionDeclareStmt)Stmt.parseStmt(null, new PeekTokenIterator(tokens.stream()));
+        var func = (FunctionDeclareStmt)Stmt.parseStmt(new PeekTokenIterator(tokens.stream()));
 
         assert func != null;
         func.print(0);
@@ -141,8 +117,8 @@ public class StmtTest {
         var it = createTokenIt("myFunction(10,11,12)");
         var it2 = createTokenIt("myFunction2(a + b, 3 + 5 /2)");
 
-        var stmt = Stmt.parseStmt(null, it);
-        var stmt2 = Stmt.parseStmt(null, it2);
+        var stmt = Stmt.parseStmt(it);
+        var stmt2 = Stmt.parseStmt(it2);
 
         assert stmt != null;
         stmt.print(0);
@@ -181,7 +157,7 @@ public class StmtTest {
         var tokens = Lexer.fromFile("./example/program.ps");
         var it = new PeekTokenIterator(tokens.stream());
 
-        var program = Program.parse(null, new PeekTokenIterator(tokens.stream()));
+        var program = Program.parse(new PeekTokenIterator(tokens.stream()));
         program.print(0);
     }
 
@@ -208,6 +184,6 @@ public class StmtTest {
         var lexer = new Lexer();
         var tokens = lexer.analyse(src.chars().mapToObj(x -> (char)x));
         var it = new PeekTokenIterator(tokens.stream());
-        return Expr.parse(null, it);
+        return Expr.parse(it);
     }
 }

@@ -6,22 +6,22 @@ import net.yangboyu.pslang.Paser.util.ParseException;
 import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 
 public class IfStmt extends Stmt {
-    public IfStmt(ASTNode _parent) {
-        super(_parent, ASTNodeTypes.IF_STMT, "if");
+    public IfStmt() {
+        super(ASTNodeTypes.IF_STMT, "if");
     }
 
-    public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
-        return IfStmt.parseIf(parent, it);
+    public static ASTNode parse(PeekTokenIterator it) throws ParseException {
+        return IfStmt.parseIf(it);
     }
 
-    public static ASTNode parseIf(ASTNode parent, PeekTokenIterator it) throws ParseException {
+    public static ASTNode parseIf(PeekTokenIterator it) throws ParseException {
         var lexeme = it.nextMatch("IF");
 
-        var IfStmt = new IfStmt(parent);
+        var IfStmt = new IfStmt();
 
         IfStmt.setLexeme(lexeme);
 
-        var expr = Expr.parse(parent, it);
+        var expr = Expr.parse(it);
         if(expr == null) {
             throw new ParseException("Syntax Error: Expression should be included inside if condition");
         }
@@ -29,10 +29,10 @@ public class IfStmt extends Stmt {
 
         it.nextMatch("THEN");
 
-        var block = parseIfBlock(parent, it);
+        var block = parseIfBlock(it);
         IfStmt.addChild(block);
 
-        var tail = parseTail(parent, it);
+        var tail = parseTail(it);
 
         if(tail != null) {
             IfStmt.addChild(tail);
@@ -43,7 +43,7 @@ public class IfStmt extends Stmt {
         return IfStmt;
     }
 
-    public static ASTNode parseTail(ASTNode parent, PeekTokenIterator it) throws ParseException {
+    public static ASTNode parseTail(PeekTokenIterator it) throws ParseException {
 
         if(!it.hasNext() || !it.peek().getValue().equals("ELSE")) {
             return null;
@@ -58,19 +58,19 @@ public class IfStmt extends Stmt {
         }
 
         if (lookahead.getValue().equals("IF")) {
-            return IfStmt.parseIf(parent, it);
+            return IfStmt.parseIf(it);
         } else if (lookahead.getValue().equals("ENDIF")) {
             return null;
         } else {
-            return parseIfBlock(parent, it);
+            return parseIfBlock(it);
         }
     }
 
-    private static ASTNode parseIfBlock(ASTNode parent, PeekTokenIterator it) throws ParseException {
-        var block = new Block(parent);
+    private static ASTNode parseIfBlock(PeekTokenIterator it) throws ParseException {
+        var block = new Block();
         ASTNode stmt = null;
         var go = it.hasNext() && !it.peek().getValue().equals("ENDIF") && !it.peek().getValue().equals("ELSE");
-        while (go && (stmt = Stmt.parseStmt(parent, it)) != null) {
+        while (go && (stmt = Stmt.parseStmt(it)) != null) {
             block.addChild(stmt);
         }
         return block;

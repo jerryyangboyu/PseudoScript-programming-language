@@ -22,7 +22,7 @@ public class ExprTest {
     @Test
     public void testAssignStmt() throws LexicalException, ParseException {
         var it = createTokenIt("myVariable <- \"Hello World\"");
-        var tree = AssignStmt.parse(null, it);
+        var tree = AssignStmt.parse(it);
         tree.print(0);
 
         assertEquals("<-", tree.getLexeme().getValue());
@@ -33,7 +33,7 @@ public class ExprTest {
     @Test
     public void testSimpleExpr() throws LexicalException, ParseException, ExecutionControl.NotImplementedException {
         var it = createTokenIt("a + b / (c * (a - b))");
-        var tree = Expr.parse(null, it);
+        var tree = Expr.parse(it);
 //        tree.print(0);
 
         assertEquals("+", tree.getLexeme().getValue());
@@ -45,7 +45,7 @@ public class ExprTest {
     @Test
     public void testComplexAssignStmt() throws LexicalException, ParseException, ExecutionControl.NotImplementedException {
         var it = createTokenIt("myVariable <- a + b / (c * (a - b))");
-        var tree = AssignStmt.parse(null, it);
+        var tree = AssignStmt.parse(it);
 //        tree.print(0);
 
         assertEquals("<-", tree.getLexeme().getValue());
@@ -58,10 +58,9 @@ public class ExprTest {
         var it = createTokenIt("CALL myFunc()");
         var it2 = createTokenIt("CALL myRoutine");
 
-        var tree = CallExpr.parse(null, it);
-        var tree2 = CallExpr.parse(null, it2);
+        var tree = CallExpr.parse(it);
+        var tree2 = CallExpr.parse(it2);
 
-        assertEquals("CALL", tree.getLexeme().getValue());
         assertEquals("myFunc", tree.getChild(0).getLexeme().getValue());
         assertEquals("myRoutine", tree2.getChild(0).getLexeme().getValue());
     }
@@ -69,7 +68,7 @@ public class ExprTest {
     @Test
     public void testComplexCallStmt() throws LexicalException, ParseException {
         var it = createTokenIt("CALL myFunc(1+1, arg2, arg3)");
-        var tree = CallExpr.parse(null, it);
+        var tree = CallExpr.parse(it);
         tree.print(0);
 
         assertEquals("myFunc", tree.getChild(0).getLexeme().getValue());
@@ -81,14 +80,14 @@ public class ExprTest {
     @Test
     public void testFunctionCallStmt() throws LexicalException, ParseException {
         var it = createTokenIt("myFunc(n, n - 1)");
-        var tree = Expr.parse(null, it);
+        var tree = Expr.parse(it);
         tree.print(0);
     }
 
     @Test
     public void testDeclareStmt() throws LexicalException, ParseException {
         var it = createTokenIt("DECLARE myVariable : INT");
-        var tree = DeclareStmt.parse(null, it);
+        var tree = DeclareStmt.parse(it);
         tree.print(0);
 
         assertEquals("myVariable", tree.getChild(0).getLexeme().getValue());
@@ -101,7 +100,7 @@ public class ExprTest {
     @Test
     public void testComplexDeclareStmt() throws LexicalException, ParseException {
         var it = createTokenIt("DECLARE myVariable : DATE");
-        var tree = DeclareStmt.parse(null, it);
+        var tree = DeclareStmt.parse(it);
         tree.print(0);
 
         assertEquals("myVariable", tree.getChild(0).getLexeme().getValue());

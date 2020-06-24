@@ -48,16 +48,16 @@ public class BlockTest {
     }
 
     private static ASTNode generateDumpBlock() {
-        var node = new Program(null);
-        var parent = new Block(node);
-        var child = new Block(parent);
-        var decls1 = generateDumpDecls(node);
-        var decls2 = generateDumpDecls(node);
-        var decls3 = generateDumpDecls(parent);
-        var assign = new AssignStmt(parent);
+        var node = new Program();
+        var parent = new Block();
+        var child = new Block();
+        var decls1 = generateDumpDecls();
+        var decls2 = generateDumpDecls();
+        var decls3 = generateDumpDecls();
+        var assign = new AssignStmt();
         assign.addChild(new Variable(new Token(TokenType.VARIABLE, "myVariable")));
         assign.addChild(new Scalar(new Token(TokenType.INTEGER, "250")));
-        child.addChild(new Block(child));
+        child.addChild(new Block());
         parent.addChild(assign);
         parent.addChild(decls3);
         parent.addChild(child);
@@ -67,8 +67,8 @@ public class BlockTest {
         return node;
     }
 
-    private static ASTNode generateDumpDecls(ASTNode parent) {
-        var decls = new DeclareStmt(parent);
+    private static ASTNode generateDumpDecls() {
+        var decls = new DeclareStmt();
         int hashCode = decls.hashCode();
         decls.addChild(new Variable(new Token(TokenType.VARIABLE, "p" + hashCode)));
         decls.addChild(new Scalar(new Token(TokenType.INTEGER, "250")));

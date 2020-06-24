@@ -7,13 +7,13 @@ import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 
 public class FileWriteStmt extends Stmt {
 
-    public FileWriteStmt(ASTNode _parent) {
-        super(_parent, ASTNodeTypes.FILE_WRITE_STMT, "writefile");
+    public FileWriteStmt() {
+        super(ASTNodeTypes.FILE_WRITE_STMT, "writefile");
     }
 
-    public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
+    public static ASTNode parse(PeekTokenIterator it) throws ParseException {
         var lexeme = it.nextMatch("WRITEFILE");
-        var fws = new FileWriteStmt(parent);
+        var fws = new FileWriteStmt();
         fws.setLexeme(lexeme);
 
         String filename = it.nextMatch(TokenType.STRING).getValue();

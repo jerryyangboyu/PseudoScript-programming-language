@@ -8,14 +8,14 @@ import net.yangboyu.pslang.Paser.util.ParseException;
 import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 
 public class FunctionArgs extends ASTNode {
-    public FunctionArgs(ASTNode _parent) {
-        super(_parent);
+    public FunctionArgs() {
+        super();
         this.label = "args";
     }
 
-    public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
+    public static ASTNode parse(PeekTokenIterator it) throws ParseException {
 
-        var args = new FunctionArgs(parent);
+        var args = new FunctionArgs();
 
         while(it.hasNext() && it.peek().isVariable()) {
             var variable = (Variable) Factor.parse(it, ASTNodeTypes.VARIABLE);

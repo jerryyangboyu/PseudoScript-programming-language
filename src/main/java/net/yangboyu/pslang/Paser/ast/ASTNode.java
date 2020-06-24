@@ -30,12 +30,7 @@ public abstract class ASTNode {
 
     protected HashMap<String, Object> _props = new HashMap<>();
 
-    public ASTNode(ASTNode _parent){
-        this.parent = _parent;
-    }
-
-    public ASTNode(ASTNode _parent, ASTNodeTypes _type, String _label){
-        this.parent = _parent;
+    public ASTNode(ASTNodeTypes _type, String _label){
         this.type = _type;
         this.label = _label;
     }
@@ -59,6 +54,7 @@ public abstract class ASTNode {
     }
 
     public void addChild(ASTNode node){
+        node.parent = this;
         this.children.add(node);
     }
 

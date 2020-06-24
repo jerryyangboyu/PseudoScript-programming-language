@@ -14,11 +14,11 @@ public class Parser {
     public static ASTNode parse(String source) throws LexicalException, ParseException {
         var lexer = new Lexer();
         var tokens = lexer.analyse(source.chars().mapToObj(x -> (char)x));
-        return Program.parse(null, new PeekTokenIterator(tokens.stream()));
+        return Program.parse(new PeekTokenIterator(tokens.stream()));
     }
 
     public static ASTNode fromFile(String file) throws FileNotFoundException, UnsupportedEncodingException, LexicalException, ParseException {
         var tokens = Lexer.fromFile(file);
-        return Program.parse(null, new PeekTokenIterator(tokens.stream()));
+        return Program.parse(new PeekTokenIterator(tokens.stream()));
     }
 }

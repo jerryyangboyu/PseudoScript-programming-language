@@ -48,6 +48,6 @@ public class ParseExprTest {
         var lexer = new Lexer();
         var tokens = lexer.analyse(src.chars().mapToObj(x -> (char)x));
         var it = new PeekTokenIterator(tokens.stream());
-        return Expr.parse(null, it);
+        return Expr.parse(it);
     }
 }

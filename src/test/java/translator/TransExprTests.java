@@ -82,25 +82,6 @@ public class TransExprTests {
     }
 
     @Test
-    public void testDeclareStmt() throws LexicalException, ParseException {
-        var source = "a=1";
-        var tree = Parser.parse(source);
-//        tree.print(0);
-        var translator = new Translator();
-        var symbolTable = new SymbolTable();
-        var program = new TAProgram();
-
-        // 这里程序的顶层默认添加了program项，需要配合parseProgram() -> parseExpr(), 才能运行这里为了测试方便直接.getChild()了
-        translator.translateDeclareStmt(program, tree.getChild(0), symbolTable);
-        System.out.println(program.toString());
-
-        var expectedResults = new String[] {
-                "a = 1",
-        };
-        assertOpCodes(expectedResults, program.getInstructions());
-    }
-
-    @Test
     public void testFunctionCallStmt() throws LexicalException, ParseException {
         // TODO
         // bug1: 如果block为空，那么不能解析

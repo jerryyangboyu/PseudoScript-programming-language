@@ -19,7 +19,7 @@ public class LoopTest {
         var it = createTokenIt("FOR i <- 1 TO 10\n" +
                 "OUTPUT \"PseudoScript count\", i\n " +
                 "ENDFOR");
-        var tree = ForStmt.parse(null, it);
+        var tree = ForStmt.parse(it);
         tree.print(0);
     }
 

@@ -6,13 +6,13 @@ import net.yangboyu.pslang.Paser.util.ParseException;
 import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 
 public class FileReadStmt extends Stmt {
-    public FileReadStmt(ASTNode _parent) {
-        super(_parent, ASTNodeTypes.FILE_READ_STMT, "readfile");
+    public FileReadStmt() {
+        super(ASTNodeTypes.FILE_READ_STMT, "readfile");
     }
 
-    public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
+    public static ASTNode parse(PeekTokenIterator it) throws ParseException {
         var lexeme = it.nextMatch("READFILE");
-        var frs = new FileReadStmt(parent);
+        var frs = new FileReadStmt();
         frs.setLexeme(lexeme);
 
         String filename = it.nextMatch(TokenType.STRING).getValue();

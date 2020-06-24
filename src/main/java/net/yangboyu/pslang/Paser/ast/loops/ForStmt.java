@@ -10,15 +10,17 @@ import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 
 public class ForStmt extends Stmt {
 
-    public ForStmt(ASTNode _parent) {
-        super(_parent, ASTNodeTypes.FOR_STMT, "for");
+    public ForStmt() {
+        super(ASTNodeTypes.FOR_STMT, "for");
     }
 
-    public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
+    public static ASTNode parse(PeekTokenIterator it) throws ParseException {
         var lexeme = it.nextMatch("FOR");
-        var forStmt = new ForStmt(parent);
+        var forStmt = new ForStmt();
         forStmt.setLexeme(lexeme);
 
+
+        // TODO 解决解析可能为空的问题
         Variable variable = (Variable) Factor.parse(it);
         forStmt.addChild(variable);
 
@@ -32,7 +34,6 @@ public class ForStmt extends Stmt {
         Scalar upperBound = (Scalar) Factor.parse(it);
         assert upperBound != null;
         int upperBoundVal = Integer.parseInt(upperBound.getLexeme().getValue());
-        assert lowerBound != null;
         int lowerBoundVal = Integer.parseInt(lowerBound.getLexeme().getValue());
         if (upperBoundVal < lowerBoundVal) {
             throw new ParseException("Upper bound must be bigger than lower bound!");
@@ -47,7 +48,7 @@ public class ForStmt extends Stmt {
             forStmt.addChild(new Scalar(new Token(TokenType.INTEGER, "1")));
         }
 
-        var block = Block.parse(parent, it);
+        var block = Block.parse(it);
         forStmt.addChild(block);
 
         it.nextMatch("ENDFOR");

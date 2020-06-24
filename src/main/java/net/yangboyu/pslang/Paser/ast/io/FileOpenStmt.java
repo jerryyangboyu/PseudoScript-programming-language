@@ -19,12 +19,12 @@ public class FileOpenStmt extends Stmt {
         return openMode;
     }
 
-    public FileOpenStmt(ASTNode _parent) {
-        super(_parent, ASTNodeTypes.FILE_OPEN_STMT, "openfile");
+    public FileOpenStmt() {
+        super(ASTNodeTypes.FILE_OPEN_STMT, "openfile");
     }
 
-    public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
-        var ofs = new FileOpenStmt(parent);
+    public static ASTNode parse(PeekTokenIterator it) throws ParseException {
+        var ofs = new FileOpenStmt();
         var lexeme = it.nextMatch("OPENFILE");
         ofs.setLexeme(lexeme);
 

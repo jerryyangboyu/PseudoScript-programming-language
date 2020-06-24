@@ -30,7 +30,7 @@ public class SelectionTest {
                 " \n p4 <- p1 + 1\n" +
                 "ENDIF\n" +
                 "ENDIF");
-        var tree = IfStmt.parse(null, it);
+        var tree = IfStmt.parse(it);
         tree.print(0);
     }
 
@@ -41,7 +41,7 @@ public class SelectionTest {
                 "THEN \n" +
                 "   i <- i + 1\n" +
                         "ENDIF");
-        var tree = IfStmt.parse(null, it);
+        var tree = IfStmt.parse(it);
         tree.print(0);
     }
 

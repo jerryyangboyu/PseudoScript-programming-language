@@ -8,12 +8,12 @@ import net.yangboyu.pslang.Paser.util.ParseException;
 import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 
 public class InputStmt extends Stmt {
-    public InputStmt(ASTNode parent) {
-        super(parent, ASTNodeTypes.INPUT_STMT, "input");
+    public InputStmt() {
+        super(ASTNodeTypes.INPUT_STMT, "input");
     }
 
-    public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
-        var input_stmt = new InputStmt(parent);
+    public static ASTNode parse(PeekTokenIterator it) throws ParseException {
+        var input_stmt = new InputStmt();
         var lexeme = it.nextMatch("INPUT");
         input_stmt.setLexeme(lexeme);
 

@@ -14,11 +14,11 @@ import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 
 public abstract class Stmt extends ASTNode {
 
-    public Stmt(ASTNode _parent, ASTNodeTypes _type, String _label) {
-        super(_parent, _type, _label);
+    public Stmt(ASTNodeTypes _type, String _label) {
+        super( _type, _label);
     }
 
-    public static ASTNode parseStmt(ASTNode parent, PeekTokenIterator it) throws ParseException {
+    public static ASTNode parseStmt(PeekTokenIterator it) throws ParseException {
         if(!it.hasNext()) {
             return null;
         }
@@ -33,23 +33,23 @@ public abstract class Stmt extends ASTNode {
         // make sure the token and lookahead are both not null pointer and put back to the origin place
 
         if(token.isVariable() && lookahead.getValue().equals("<-")) {
-            return AssignStmt.parse(parent, it);
+            return AssignStmt.parse(it);
         }else if (token.getValue().equals("DECLARE") && lookahead.isVariable()){
-            return DeclareStmt.parse(parent, it);
+            return DeclareStmt.parse(it);
         }else if (token.getValue().equals("CALL")) {
-            return CallExpr.parse(parent, it);
+            return CallExpr.parse(it);
         }else if (token.getValue().equals("FUNCTION")) {
-            return FunctionDeclareStmt.parse(parent, it);
+            return FunctionDeclareStmt.parse(it);
         }else if (token.getValue().equals("RETURN")) {
-            return ReturnStmt.parse(parent, it);
+            return ReturnStmt.parse(it);
         }else if (token.getValue().equals("IF")) {
-            return IfStmt.parse(parent, it);
+            return IfStmt.parse(it);
         }else if (token.getValue().equals("OUTPUT")) {
-            return OutputStmt.parse(parent, it);
+            return OutputStmt.parse(it);
         }else if (token.getValue().equals("INPUT")) {
-            return InputStmt.parse(parent, it);
+            return InputStmt.parse(it);
         } else {
-            ASTNode expr = Expr.parse(parent, it);
+            ASTNode expr = Expr.parse(it);
 
 
                 // TODO deal with the last test of TestStmt

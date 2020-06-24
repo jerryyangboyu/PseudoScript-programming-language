@@ -9,12 +9,12 @@ import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 
 public class DeclareStmt extends Stmt {
 
-    public DeclareStmt(ASTNode _parent) {
-        super(_parent, ASTNodeTypes.DECLARE_STMT, "declare");
+    public DeclareStmt() {
+        super(ASTNodeTypes.DECLARE_STMT, "declare");
     }
 
-    public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
-        var stmt = new DeclareStmt(parent);
+    public static ASTNode parse(PeekTokenIterator it) throws ParseException {
+        var stmt = new DeclareStmt();
         var lexeme = it.nextMatch("DECLARE");
         stmt.setLexeme(lexeme);
 

@@ -7,14 +7,14 @@ import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 
 public class FunctionDeclareStmt extends Stmt {
 
-    public FunctionDeclareStmt(ASTNode _parent) {
-        super(_parent, ASTNodeTypes.FUNCTION_DECLARE_STMT, "func");
+    public FunctionDeclareStmt() {
+        super(ASTNodeTypes.FUNCTION_DECLARE_STMT, "func");
     }
 
-    public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
+    public static ASTNode parse(PeekTokenIterator it) throws ParseException {
         it.nextMatch("FUNCTION");
 
-        var func = new FunctionDeclareStmt(parent);
+        var func = new FunctionDeclareStmt();
 
         // lexeme is function variable
         var lexeme  = it.peek(); // func fibonacci
@@ -24,13 +24,13 @@ public class FunctionDeclareStmt extends Stmt {
 
         // parse arguments
         it.nextMatch("(");
-        var args = FunctionArgs.parse(parent, it);
+        var args = FunctionArgs.parse(it);
         it.nextMatch(")");
         func.addChild(args);
 
         // parse return data type
         it.nextMatch("RETURNS");
-        var keyword = it.nextMatch(TokenType.KEYWORD);
+        var keyword = it.next();
         // It can return any data type include user defined data type and inbuilt data type
         if(!keyword.isType()) {
             throw new ParseException(keyword);
@@ -38,7 +38,7 @@ public class FunctionDeclareStmt extends Stmt {
         functionVariable.setTypeLexeme(keyword);
 
         // parse function body
-        var block = Block.parse(parent, it);
+        var block = Block.parse(it);
         func.addChild(block);
 
         it.nextMatch("ENDFUNCTION");

@@ -16,6 +16,8 @@ public class FuncStmtTest {
     @Test
     public void testFunctionDeclsStmt() throws LexicalException, ParseException {
         // TODO
+        // bug1: 将Utils方法兼容函数
+        // TODO
         // bug2: 如果只是函数名相同但是参数不同，不会报未找到错误
 
         var source = "FUNCTION add(a: INTEGER, b: INTEGER) RETURNS INTEGER\n " +

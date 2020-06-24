@@ -7,7 +7,7 @@ import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 
 public class SimpleParser {
     public static ASTNode parse(PeekTokenIterator it) throws ParseException {
-        var expr = new Expr(null);
+        var expr = new Expr();
         var scalar = Factor.parse(it);
 //        System.out.println(it.peek());
         if (!it.hasNext() || it.peek() == null) {

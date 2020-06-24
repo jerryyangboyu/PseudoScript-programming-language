@@ -9,18 +9,18 @@ import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 
 public class ReturnStmt extends Stmt {
 
-    public ReturnStmt(ASTNode _parent) {
-        super(_parent, ASTNodeTypes.RETURN_STMT, "return");
+    public ReturnStmt() {
+        super(ASTNodeTypes.RETURN_STMT, "return");
     }
 
-    public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
+    public static ASTNode parse(PeekTokenIterator it) throws ParseException {
         var lexeme = it.nextMatch("RETURN");
 
-        var returnStmt = new ReturnStmt(parent);
+        var returnStmt = new ReturnStmt();
 
         returnStmt.setLexeme(lexeme);
 
-        var expr = Expr.parse(parent, it);
+        var expr = Expr.parse(it);
 
         if(expr != null) {
             returnStmt.addChild(expr);

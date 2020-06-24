@@ -16,8 +16,8 @@ public class IOTest {
     public void testBasicInput() throws LexicalException, ParseException {
         var it = createTokenIt("INPUT myVariable\n");
         var it2 = createTokenIt("INPUT var2 IF a == 0");
-        var tree = InputStmt.parse(null, it);
-        var tree2 = InputStmt.parse(null, it2);
+        var tree = InputStmt.parse(it);
+        var tree2 = InputStmt.parse(it2);
 
         assertEquals("myVariable", tree.getChild(0).getLexeme().getValue());
         assertEquals(TokenType.KEYWORD, tree.getLexeme().getType());
@@ -30,7 +30,7 @@ public class IOTest {
     @Test
     public void complexInput() throws LexicalException, ParseException {
         var it = createTokenIt("INPUT var, var1, var2, var3 IF a == 0");
-        var tree = InputStmt.parse(null, it);
+        var tree = InputStmt.parse(it);
         assertEquals(TokenType.KEYWORD, tree.getLexeme().getType());
         assertEquals("var", tree.getChild(0).getLexeme().getValue());
         assertEquals("var1", tree.getChild(1).getLexeme().getValue());
@@ -39,7 +39,7 @@ public class IOTest {
         assertEquals("IF", it.peek().getValue());
 
         var it2 = createTokenIt("INPUT var, var1, var2, var3\n");
-        var tree2 = InputStmt.parse(null, it2);
+        var tree2 = InputStmt.parse(it2);
         assertEquals(TokenType.KEYWORD, tree.getLexeme().getType());
         assertEquals("var", tree.getChild(0).getLexeme().getValue());
         assertEquals("var1", tree.getChild(1).getLexeme().getValue());
@@ -50,14 +50,14 @@ public class IOTest {
     @Test
     public void testOpenFileStmt() throws LexicalException, ParseException {
         var it = createTokenIt("OPENFILE \"test.txt\" FOR READ");
-        var tree = FileOpenStmt.parse(null, it);
+        var tree = FileOpenStmt.parse(it);
         tree.print(0);
     }
 
     @Test
     public void testCloseFileStmt() throws ParseException, LexicalException {
         var it = createTokenIt("CLOSEFILE \"test.txt\"");
-        var tree = FileCloseStmt.parse(null, it);
+        var tree = FileCloseStmt.parse(it);
         tree.print(0);
 
     }
@@ -65,7 +65,7 @@ public class IOTest {
     @Test
     public void testFileReadStmt() throws LexicalException, ParseException {
         var it = createTokenIt("READFILE \"test.txt\", myVariable");
-        ASTNode tree = FileReadStmt.parse(null, it);
+        ASTNode tree = FileReadStmt.parse(it);
 
         assertEquals("myVariable", tree.getChild(0).getLexeme().getValue());
         assertEquals("\"test.txt\"", tree.getProp("filename"));
@@ -74,7 +74,7 @@ public class IOTest {
     @Test
     public void testFileWriteStmt() throws LexicalException, ParseException {
         var it = createTokenIt("WRITEFILE \"test.txt\", myVariable");
-        ASTNode tree = FileWriteStmt.parse(null, it);
+        ASTNode tree = FileWriteStmt.parse(it);
 
         assertEquals("myVariable", tree.getChild(0).getLexeme().getValue());
         assertEquals("\"test.txt\"", tree.getProp("filename"));
@@ -83,7 +83,7 @@ public class IOTest {
     @Test
     public void testOutput() throws LexicalException, ParseException {
         var it = createTokenIt("OUTPUT \"PseudoScript is fun!\"");
-        var tree = OutputStmt.parse(null, it);
+        var tree = OutputStmt.parse(it);
         tree.print(0);
     }
 

@@ -9,19 +9,19 @@ import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 
 public class WhileStmt extends Stmt {
 
-    public WhileStmt(ASTNode _parent) {
-        super(_parent, ASTNodeTypes.WHILE_STMT, "while");
+    public WhileStmt() {
+        super(ASTNodeTypes.WHILE_STMT, "while");
     }
 
     public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
         var lexeme = it.nextMatch("WHILE");
-        var whileStmt = new WhileStmt(parent);
+        var whileStmt = new WhileStmt();
         whileStmt.setLexeme(lexeme);
 
-        var expr = Expr.parse(parent, it);
+        var expr = Expr.parse(it);
         whileStmt.addChild(expr);
 
-        var block = Block.parse(parent, it);
+        var block = Block.parse(it);
         whileStmt.addChild(block);
 
         it.nextMatch("ENDWHILE");

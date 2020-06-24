@@ -11,12 +11,12 @@ import org.apache.commons.lang3.StringUtils;
 public class FileCloseStmt extends Stmt {
     private String filename;
 
-    public FileCloseStmt(ASTNode _parent) {
-        super(_parent, ASTNodeTypes.FILE_CLOSE_STMT, "closefile");
+    public FileCloseStmt() {
+        super(ASTNodeTypes.FILE_CLOSE_STMT, "closefile");
     }
 
-    public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
-        var fcs = new FileCloseStmt(parent);
+    public static ASTNode parse(PeekTokenIterator it) throws ParseException {
+        var fcs = new FileCloseStmt();
         var lexeme = it.nextMatch("CLOSEFILE");
         fcs.setLexeme(lexeme);
 

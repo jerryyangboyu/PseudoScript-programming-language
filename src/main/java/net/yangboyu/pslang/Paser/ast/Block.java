@@ -4,17 +4,17 @@ import net.yangboyu.pslang.Paser.util.ParseException;
 import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 
 public class Block extends Stmt {
-    public Block(ASTNode _parent) {
-        super(_parent, ASTNodeTypes.BLOCK, "block");
+    public Block() {
+        super(ASTNodeTypes.BLOCK, "block");
     }
 
-    public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
+    public static ASTNode parse(PeekTokenIterator it) throws ParseException {
 
-        var block = new Block(parent);
+        var block = new Block();
 
         ASTNode stmt = null;
 
-        while ( (stmt = Stmt.parseStmt(parent, it)) != null) {
+        while ( (stmt = Stmt.parseStmt(it)) != null) {
             block.addChild(stmt);
         }
 

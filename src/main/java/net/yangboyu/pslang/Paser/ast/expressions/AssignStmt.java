@@ -6,12 +6,12 @@ import net.yangboyu.pslang.Paser.util.PeekTokenIterator;
 
 public class AssignStmt extends Stmt {
 
-    public AssignStmt(ASTNode _parent) {
-        super(_parent, ASTNodeTypes.ASSIGN_STMT, "assign");
+    public AssignStmt() {
+        super(ASTNodeTypes.ASSIGN_STMT, "assign");
     }
 
-    public static ASTNode parse(ASTNode parent, PeekTokenIterator it) throws ParseException {
-        var stmt = new AssignStmt(parent);
+    public static ASTNode parse(PeekTokenIterator it) throws ParseException {
+        var stmt = new AssignStmt();
 
         var factor = (Variable) Factor.parse(it, ASTNodeTypes.VARIABLE);
 
@@ -19,7 +19,7 @@ public class AssignStmt extends Stmt {
 
         var lexeme = it.nextMatch("<-");
 
-        var expr = Expr.parse(stmt, it);
+        var expr = Expr.parse(it);
 
         stmt.addChild(expr);
 

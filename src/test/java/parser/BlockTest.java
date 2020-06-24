@@ -22,7 +22,7 @@ public class BlockTest {
     @Test
     public void testSimpleBlock() throws LexicalException, ParseException {
         var it = createTokenIt("");
-        var tree = Block.parse(null, it);
+        var tree = Block.parse(it);
 //        tree.print(0);
         assertEquals("block", tree.getLabel());
     }
@@ -30,7 +30,7 @@ public class BlockTest {
     @Test
     public void testBasicBlock() throws LexicalException, ParseException {
         var it = createTokenIt("myVariable <- 3 + 5 / 2 \n DECLARE var2 : STRING \n CALL sub");
-        var tree = Block.parse(null, it);
+        var tree = Block.parse(it);
         tree.print(0);
 
         var stmt1 = tree.getChild(0);
@@ -42,7 +42,7 @@ public class BlockTest {
     @Test
     public void testFunctionBasic() throws FileNotFoundException, UnsupportedEncodingException, LexicalException, ParseException {
         var tokens = Lexer.fromFile("./example/function_test.txt");
-        var func = (FunctionDeclareStmt) Stmt.parseStmt(null, new PeekTokenIterator(tokens.stream()));
+        var func = (FunctionDeclareStmt) Stmt.parseStmt(new PeekTokenIterator(tokens.stream()));
 
         assert func != null;
         func.print(0);
