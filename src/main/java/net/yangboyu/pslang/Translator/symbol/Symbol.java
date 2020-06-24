@@ -6,6 +6,7 @@ public class Symbol {
     // union
     SymbolTable parent;
     Token lexeme;
+    Token typeLexeme;
     String label;
 
     int offset;
@@ -39,6 +40,7 @@ public class Symbol {
 
     public Symbol copy() {
         var symbol = new Symbol(this.type);
+        symbol.typeLexeme = this.typeLexeme;
         symbol.lexeme = this.lexeme;
         symbol.label = this.label;
         symbol.offset = this.offset;
@@ -93,6 +95,14 @@ public class Symbol {
 
     public String getLabel() {
         return this.label;
+    }
+
+    public void setTypeLexeme(Token type) {
+        this.typeLexeme = type;
+    }
+
+    public Token getTypeLexeme() {
+        return this.typeLexeme;
     }
 
 }

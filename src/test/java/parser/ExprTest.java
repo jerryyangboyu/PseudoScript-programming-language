@@ -95,6 +95,20 @@ public class ExprTest {
 
         var factor = (Variable) tree.getChild(0);
         assertEquals("INT", factor.getTypeLexeme().getValue());
+        assertEquals(TokenType.INTEGER, factor.getTypeLexeme().getType());
+    }
+
+    @Test
+    public void testComplexDeclareStmt() throws LexicalException, ParseException {
+        var it = createTokenIt("DECLARE myVariable : DATE");
+        var tree = DeclareStmt.parse(null, it);
+        tree.print(0);
+
+        assertEquals("myVariable", tree.getChild(0).getLexeme().getValue());
+
+        var factor = (Variable) tree.getChild(0);
+        assertEquals("DATE", factor.getTypeLexeme().getValue());
+        assertEquals(TokenType.TYPE, factor.getTypeLexeme().getType());
     }
 
     private PeekTokenIterator createTokenIt(String src) throws LexicalException, ParseException {

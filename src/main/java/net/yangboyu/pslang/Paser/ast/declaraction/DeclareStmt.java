@@ -1,5 +1,6 @@
 package net.yangboyu.pslang.Paser.ast.declaraction;
 
+import net.yangboyu.pslang.Lexer.Token;
 import net.yangboyu.pslang.Lexer.TokenType;
 import net.yangboyu.pslang.Paser.ast.*;
 import net.yangboyu.pslang.Paser.ast.expressions.Expr;
@@ -23,13 +24,15 @@ public class DeclareStmt extends Stmt {
         it.nextMatch(":");
 
         // primary data type support
-        var type = it.nextMatch(TokenType.KEYWORD);
-        if (type.isPrimaryType()) {
-            factor.setTypeLexeme(type);
-        } else if (type.isType()) {
-            // other types TODO
+        Token typeKeyword = it.next();
+        if (typeKeyword.isPrimaryType()) {
+            factor.setTypeLexeme(typeKeyword);
+        } else if (typeKeyword.isVariable() || typeKeyword.isType()) {
+            // TODO
+            // 兼容非系统类型，包括预定义类型比如DATE
+            factor.setTypeLexeme(new Token(TokenType.TYPE, typeKeyword.getValue()));
         } else {
-            throw new ParseException(type);
+            throw new ParseException(typeKeyword);
         }
 
         return stmt;

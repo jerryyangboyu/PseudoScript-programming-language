@@ -43,12 +43,28 @@ public class Token {
             it.next();
         }
 
-        if(Keywords.isKeyword(s.toString())){
-            return new Token(TokenType.KEYWORD, s.toString());
+        if (s.toString().equals("INT") || s.toString().equals("INTEGER")) {
+            return new Token(TokenType.INTEGER, s.toString());
         }
 
-        if(s.toString().equals("TRUE") || s.toString().equals("FALSE")){
+        if (s.toString().equals("STRING") || s.toString().equals("STR")) {
+            return new Token(TokenType.STRING, s.toString());
+        }
+
+        if (s.toString().equals("REAL") || s.toString().equals("FLOAT")) {
+            return new Token(TokenType.REAL, s.toString());
+        }
+
+        if (s.toString().equals("CHAR") || s.toString().equals("CHARACTER")) {
+            return new Token(TokenType.REAL, s.toString());
+        }
+
+        if(s.toString().equals("TRUE") || s.toString().equals("FALSE") || s.toString().equals("BOOLEAN") || s.toString().equals("BOOL")){
             return new Token(TokenType.BOOLEAN, s.toString());
+        }
+
+        if(Keywords.isKeyword(s.toString())){
+            return new Token(TokenType.KEYWORD, s.toString());
         }
 
         return new Token(TokenType.VARIABLE, s.toString());
@@ -369,18 +385,28 @@ public class Token {
 
     public boolean isPrimaryType() {
         return this._value.equals("BOOLEAN") ||
+                this._value.equals("BOOL") ||
                 this._value.equals("INT") ||
                 this._value.equals("INTEGER") ||
                 this._value.equals("STRING") ||
-                this._value.equals("REAL");
+                this._value.equals("STR") ||
+                this._value.equals("CHAR") ||
+                this._value.equals("CHARACTER") ||
+                this._value.equals("REAL") ||
+                this._value.equals("FLOAT");
     }
 
     public boolean isType() {
         return this._value.equals("BOOLEAN") ||
+                this._value.equals("BOOL") ||
                 this._value.equals("INT") ||
                 this._value.equals("INTEGER") ||
                 this._value.equals("STRING") ||
+                this._value.equals("STR") ||
+                this._value.equals("CHAR") ||
+                this._value.equals("CHARACTER") ||
                 this._value.equals("REAL") ||
+                this._value.equals("FLOAT") ||
                 this._value.equals("DATE") ||
                 this._value.equals("CURRENCY");
     }

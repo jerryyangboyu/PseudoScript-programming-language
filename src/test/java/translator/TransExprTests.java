@@ -46,6 +46,20 @@ public class TransExprTests {
     }
 
     @Test
+    public void transTypeCheckExpr() throws LexicalException, ParseException {
+        var source = "\"test\" + 2";
+        var tree = Parser.parse(source);
+//        tree.print(0);
+        var translator = new Translator();
+        var symbolTable = new SymbolTable();
+        var program = new TAProgram();
+
+        // 这里程序的顶层默认添加了program项，需要配合parseProgram() -> parseExpr(), 才能运行这里为了测试方便直接.getChild()了
+        translator.translateExpr(program, tree.getChild(0), symbolTable);
+        System.out.println(program.toString());
+    }
+
+    @Test
     public void testAssignStmt() throws LexicalException, ParseException {
         var source = "a<-1.0*2.0*3.0";
         var tree = Parser.parse(source);
@@ -94,6 +108,16 @@ public class TransExprTests {
 
         var source = "FUNCTION add() RETURNS INTEGER ENDFUNCTION \n" +
                 "ans <- add(5, 10)";
+        var tree = Parser.parse(source);
+        var translator = new Translator();
+        var program = translator.translate(tree);
+        System.out.println(program.toString());
+    }
+
+    @Test
+    public void testDeclsAndAssignStmt() throws LexicalException, ParseException {
+        var source = "DECLARE a: STR\n" +
+                "a <- 1 + 10 / 2";
         var tree = Parser.parse(source);
         var translator = new Translator();
         var program = translator.translate(tree);

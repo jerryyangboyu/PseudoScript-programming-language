@@ -14,11 +14,13 @@ public class FuncStmtTest {
 
 
     @Test
-    public void testFunctionEmptyDeclsStmt() throws LexicalException, ParseException {
+    public void testFunctionDeclsStmt() throws LexicalException, ParseException {
         // TODO
         // bug2: 如果只是函数名相同但是参数不同，不会报未找到错误
 
-        var source = "FUNCTION add() RETURNS INTEGER ENDFUNCTION ";
+        var source = "FUNCTION add(a: INTEGER, b: INTEGER) RETURNS INTEGER\n " +
+                "   RETURN a + b\n" +
+                "ENDFUNCTION ";
         var tree = Parser.parse(source);
         tree.print(0);
         var translator = new Translator();

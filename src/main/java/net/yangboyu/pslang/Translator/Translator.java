@@ -4,6 +4,7 @@ import net.yangboyu.pslang.Lexer.Token;
 import net.yangboyu.pslang.Lexer.TokenType;
 import net.yangboyu.pslang.Paser.ast.ASTNode;
 import net.yangboyu.pslang.Paser.ast.ASTNodeTypes;
+import net.yangboyu.pslang.Paser.ast.Variable;
 import net.yangboyu.pslang.Paser.ast.expressions.Expr;
 import net.yangboyu.pslang.Paser.ast.selection.IfStmt;
 import net.yangboyu.pslang.Paser.ast.subroutines.FunctionDeclareStmt;
@@ -45,8 +46,20 @@ public class Translator {
             case CALL_EXPR:
                 translateCallExpr(program, node, symbolTable);
                 return;
+            case RETURN_STMT:
+                translateReturnStmt(program, node, symbolTable);
+                return;
         }
         throw new NotImplementedException("net.yangboyu.pslang.Translator not implemented for " + node.getType());
+    }
+
+    private void translateReturnStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
+        Symbol resultVal = null;
+        // return 返回值可能为空
+        if (node.getChild(0) != null) {
+            resultVal = translateExpr(program, node.getChild(0), symbolTable);
+        }
+        program.add(new TAInstruction(TAInstructionType.RETURN, null, null, resultVal, null));
     }
 
     private Symbol translateCallExpr(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
@@ -168,9 +181,18 @@ public class Translator {
     }
 
     public void translateAssignStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
-        Symbol assignedSymbol = symbolTable.createSymbolByLexeme(node.getChild(0).getLexeme());
+        Symbol assignedSymbol = symbolTable.cloneFromSymbolTree(node.getChild(0).getLexeme(), 0);
+        if (assignedSymbol == null) {
+            throw new ParseException("Syntax Error, Identifier \"" + node.getChild(0).getLexeme().getValue() + "\" is not defined");
+        }
         ASTNode expr = node.getChild(1);
         Symbol addr = translateExpr(program, expr, symbolTable);
+
+        System.out.println(addr.getTypeLexeme());
+        System.out.println(addr.getLexeme().getType());
+        System.out.println(assignedSymbol.getTypeLexeme());
+        Utils.assertEqualType(assignedSymbol, addr);
+
         program.add(new TAInstruction(TAInstructionType.ASSIGN, assignedSymbol, "=", addr, null));
     }
 
@@ -193,19 +215,19 @@ public class Translator {
                 translateExpr(program, child, symbolTable);
             }
 
+            // 没得可遍历了，到这里时single节点
             // 如果中间节点没有加上标签，那么创建中间节点的变量
             if (node.getProp("addr") == null) {
                 node.setProp("addr", symbolTable.createVariable());
             }
 
-            checkDataType(node);
+            Symbol parent = (Symbol)node.getProp("addr");
+            Symbol child1 = (Symbol)node.getChild(0).getProp("addr");
+            Symbol child2 = (Symbol)node.getChild(1).getProp("addr");
 
-            var instruction = new TAInstruction(TAInstructionType.ASSIGN,
-                    (Symbol)node.getProp("addr"),
-                    node.getLexeme().getValue(),
-                    (Symbol)node.getChild(0).getProp("addr"),
-                    (Symbol)node.getChild(1).getProp("addr"));
+            var instruction = new TAInstruction(TAInstructionType.ASSIGN, parent, node.getLexeme().getValue(), child1, child2);
 
+            parent.setTypeLexeme(Utils.getTypeDerivation(child1, child2));
             program.add(instruction);
 
             return instruction.getResult();
@@ -215,19 +237,13 @@ public class Translator {
         throw new NotImplementedException("Unexpected token type: " + node.getType() + debugInfo);
     }
 
-    public static void checkDataType(ASTNode node) {
-        // TODO
-    }
-
     public void translateDeclareStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
         Token lexeme = node.getChild(0).getLexeme();
+        Token typeLexeme = ((Variable)node.getChild(0)).getTypeLexeme();
         if (symbolTable.exists(lexeme)) {
             throw new ParseException("Syntax Error, Identifier \"" + lexeme.getValue() + "\" is already defined");
         }
-
         var assignedSymbol = symbolTable.createSymbolByLexeme(lexeme);
-        var expr = node.getChild(1);
-        var addr = translateExpr(program, expr, symbolTable);
-        program.add(new TAInstruction(TAInstructionType.ASSIGN, assignedSymbol, "=", addr, null));
+        assignedSymbol.setTypeLexeme(typeLexeme);
     }
 }

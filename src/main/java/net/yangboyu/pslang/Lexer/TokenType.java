@@ -9,4 +9,5 @@ public enum  TokenType {
     BOOLEAN,
     STRING,
     REAL,
+    TYPE
 }
